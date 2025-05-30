@@ -1,0 +1,30 @@
+﻿@model WebApplication1.Models.ChiSoBMI
+
+@{
+    ViewBag.Title = "Kết quả BMI";
+    Layout = "~/Views/Layout/_UserLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Kết quả chỉ số BMI</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <b>Chỉ số BMI của bạn là:</b> <span style="color: #198754; font-size: 1.3em;">@Model.BMI.ToString("0.00")</span>
+                    </div>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item"><b>Chiều cao:</b> @Model.ChieuCao m</li>
+                        <li class="list-group-item"><b>Cân nặng:</b> @Model.CanNang kg</li>
+                    </ul>
+                    <a href="@Url.Action("NhapChiSoBMI", "LoTrinh")" class="btn btn-warning w-100">Sửa chỉ số BMI</a>
+                    <a href="@Url.Action("LoTrinhCuaToi", "LoTrinh")" class="btn btn-outline-success w-100 mt-2">Về lộ trình của tôi</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

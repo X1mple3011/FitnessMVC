@@ -1,0 +1,63 @@
+﻿@model WebApplication1.Models.LoTrinh
+
+@{
+    ViewBag.Title = Model.TenLoTrinh;
+    Layout = "~/Views/Layout/_UserLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">@Model.TenLoTrinh</h2>
+                    <p class="card-text">@Model.MoTa</p>
+
+                    @* <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Lộ trình này phù hợp với người có BMI: @Model.BMI
+                    </div> *@
+
+                    <h4 class="mt-4 mb-3">Danh sách bài tập</h4>
+                    @if (Model.LoTrinh_BaiTaps != null && Model.LoTrinh_BaiTaps.Any())
+                    {
+                        <ul>
+                            @foreach (var ltb in Model.LoTrinh_BaiTaps)
+                            {
+                                <li>@ltb.BaiTap.TenBaiTap - @ltb.BaiTap.MoTa</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>Chưa có bài tập nào trong lộ trình này.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Thông tin BMI</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6>Phân loại BMI:</h6>
+                        <ul class="mb-0">
+                            <li>Thiếu cân: BMI < 18.5</li>
+                            <li>Bình thường: 18.5 - 24.9</li>
+                            <li>Thừa cân: 25 - 29.9</li>
+                            <li>Béo phì: BMI ≥ 30</li>
+                        </ul>
+                    </div>
+                    @if (Session["UserId"] != null)
+                    {
+                        <a href="@Url.Action("NhapChiSoBMI", "LoTrinh")" class="btn btn-success w-100">
+                            Cập nhật BMI của tôi
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

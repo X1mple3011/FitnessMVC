@@ -1,0 +1,72 @@
+﻿@model IEnumerable<WebApplication1.Models.LoTrinh>
+
+@{
+    ViewBag.Title = "Lộ trình tập luyện";
+    Layout = "~/Views/Layout/_UserLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="mb-4">Lộ trình tập luyện</h2>
+
+            @foreach (var item in Model)
+            {
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            <a href="@Url.Action("ChiTiet", "LoTrinh", new { id = item.Id })" class="text-success text-decoration-none">
+                                @item.TenLoTrinh
+                            </a>
+                        </h3>
+                        <p class="card-text">@item.MoTa</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-info me-2">
+                                    <i class="fas fa-dumbbell"></i> @item.LoTrinh_BaiTaps.Count bài tập
+                                </span>
+                                <span class="badge bg-warning">
+                                    <i class="fas fa-weight"></i> BMI: @item.BMI
+                                </span>
+                            </div>
+                            <a href="@Url.Action("ChiTiet", "LoTrinh", new { id = item.Id })" class="btn btn-outline-success">
+                                Xem chi tiết
+                            </a>
+                            @if (Session["UserId"] != null)
+                            {
+                                <form action="@Url.Action("ChonLoTrinh", "LoTrinh")" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="loTrinhId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">Chọn lộ trình này</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Thông tin BMI</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6>Phân loại BMI:</h6>
+                        <ul class="mb-0">
+                            <li>Thiếu cân: BMI < 18.5</li>
+                            <li>Bình thường: 18.5 - 24.9</li>
+                            <li>Thừa cân: 25 - 29.9</li>
+                            <li>Béo phì: BMI ≥ 30</li>
+                        </ul>
+                    </div>
+                    @if (Session["UserId"] != null)
+                    {
+                       
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@model WebApplication1.Models.ChiSoBMI
+
+@{
+    ViewBag.Title = "Nhập chỉ số BMI";
+    Layout = "~/Views/Layout/_UserLayout.cshtml";
+}
+
+@if (ViewBag.ThongBao != null)
+{
+    <div class="alert alert-success">@ViewBag.ThongBao</div>
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Nhập chỉ số BMI</h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("NhapChiSoBMI", "LoTrinh", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">Chiều cao (m)</label>
+                            @Html.TextBoxFor(m => m.ChieuCao, new { @class = "form-control", @id = "chieuCao", type = "number", step = "0.01", min = "0" })
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">Cân nặng (kg)</label>
+                            @Html.TextBoxFor(m => m.CanNang, new { @class = "form-control", @id = "canNang", type = "number", step = "0.1", min = "0" })
+                        </div>
+
+                        <div class="alert alert-info">
+                            <h6>Phân loại BMI:</h6>
+                            <ul class="mb-0">
+                                <li>Thiếu cân: BMI < 18.5</li>
+                                <li>Bình thường: 18.5 - 24.9</li>
+                                <li>Thừa cân: 25 - 29.9</li>
+                                <li>Béo phì: BMI ≥ 30</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-3">
+                            <label><b>Chỉ số BMI của bạn:</b></label>
+                            <div id="bmiResult" style="font-size: 1.2em; color: #198754;"></div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">Lưu</button>
+                            <a href="@Url.Action("Index", "LoTrinh")" class="btn btn-outline-secondary">Hủy</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function tinhBMI() {
+            var chieuCao = parseFloat($('#chieuCao').val());
+            var canNang = parseFloat($('#canNang').val());
+            var bmi = "";
+            if (chieuCao > 0 && canNang > 0) {
+                bmi = (canNang / (chieuCao * chieuCao)).toFixed(2);
+            }
+            $('#bmiResult').text(bmi ? bmi : "");
+        }
+
+        $(document).ready(function () {
+            $('#chieuCao, #canNang').on('input', tinhBMI);
+        });
+    </script>
+}
