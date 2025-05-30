@@ -1,0 +1,106 @@
+﻿@model IEnumerable<WebApplication1.Models.ChiSoBMI>
+
+@{
+    ViewBag.Title = "Xem chỉ số BMI";
+    Layout = "~/Views/Layout/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Xem chỉ số BMI</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Thống kê BMI</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="bmiChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Danh sách chỉ số BMI</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Người dùng</th>
+                                    <th>Chiều cao (m)</th>
+                                    <th>Cân nặng (kg)</th>
+                                    <th>BMI</th>
+                                    <th>Ngày cập nhật</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.NguoiDung.HoTen</td>
+                                        <td>@item.ChieuCao</td>
+                                        <td>@item.CanNang</td>
+                                        <td>@item.BMI</td>
+                                        <td>@item.NgayCapNhat.ToString("dd/MM/yyyy HH:mm")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Dữ liệu cho biểu đồ
+            var bmiData = {
+                underweight: @Model.Count(x => x.BMI < 18.5),
+                normal: @Model.Count(x => x.BMI >= 18.5 && x.BMI < 25),
+                overweight: @Model.Count(x => x.BMI >= 25 && x.BMI < 30),
+                obese: @Model.Count(x => x.BMI >= 30)
+            };
+
+            // Vẽ biểu đồ
+            var ctx = document.getElementById('bmiChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Thiếu cân', 'Bình thường', 'Thừa cân', 'Béo phì'],
+                    datasets: [{
+                        data: [
+                            bmiData.underweight,
+                            bmiData.normal,
+                            bmiData.overweight,
+                            bmiData.obese
+                        ],
+                        backgroundColor: [
+                            '#ffc107',
+                            '#28a745',
+                            '#fd7e14',
+                            '#dc3545'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
