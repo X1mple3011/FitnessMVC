@@ -1,0 +1,117 @@
+﻿@model IEnumerable<WebApplication1.Models.LoTrinh>
+
+@{
+    ViewBag.Title = "Quản lý lộ trình";
+    Layout = "~/Views/Layout/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Quản lý lộ trình</h2>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTrainingModal">
+            <i class="fas fa-plus"></i> Thêm lộ trình mới
+        </button>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tên lộ trình</th>
+                            <th>Mô tả</th>
+                            <th>BMI</th>
+                            <th>Số bài tập</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.TenLoTrinh</td>
+                                <td>@item.MoTa</td>
+                                <td>@item.BMI</td>
+                                <td>@item.LoTrinh_BaiTaps.Count</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary edit-btn" data-id="@item.Id">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger delete-btn" data-id="@item.Id">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thêm lộ trình -->
+<div class="modal fade" id="addTrainingModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm lộ trình mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addTrainingForm">
+                    <div class="mb-3">
+                        <label class="form-label">Tên lộ trình</label>
+                        <input type="text" class="form-control" name="TenLoTrinh" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả</label>
+                        <textarea class="form-control" name="MoTa" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">BMI</label>
+                        <input type="number" class="form-control" name="BMI" step="0.1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Chọn bài tập</label>
+                        <select class="form-select" name="BaiTaps" multiple required>
+                            @foreach (var baiTap in ViewBag.BaiTaps)
+                            {
+                                <option value="@baiTap.Id">@baiTap.TenBaiTap</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-success" id="saveTraining">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Xử lý thêm lộ trình
+            $('#saveTraining').click(function() {
+                var formData = $('#addTrainingForm').serialize();
+                $.post('@Url.Action("ThemLoTrinh", "Admin")', formData, function() {
+                    location.reload();
+                });
+            });
+
+            // Xử lý xóa lộ trình
+            $('.delete-btn').click(function() {
+                if (confirm('Bạn có chắc muốn xóa lộ trình này?')) {
+                    var id = $(this).data('id');
+                    $.post('@Url.Action("XoaLoTrinh", "Admin")', { id: id }, function() {
+                        location.reload();
+                    });
+                }
+            });
+        });
+    </script>
+}
