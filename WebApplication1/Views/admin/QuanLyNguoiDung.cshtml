@@ -1,0 +1,96 @@
+﻿@model IEnumerable<WebApplication1.Models.NguoiDung>
+
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    Layout = "~/Views/Layout/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Quản lý người dùng</h2>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Tên đăng nhập</th>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Vai trò</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.TenDangNhap</td>
+                                <td>@item.HoTen</td>
+                                <td>@item.Email</td>
+                                <td>@item.PhanQuyen.TenQuyen</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning reset-password-btn" data-id="@item.Id">
+                                        <i class="fas fa-key"></i> Đặt lại mật khẩu
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal đặt lại mật khẩu -->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đặt lại mật khẩu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="resetPasswordForm">
+                    <input type="hidden" name="userId" id="userId">
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu mới</label>
+                        <input type="password" class="form-control" name="newPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Xác nhận mật khẩu</label>
+                        <input type="password" class="form-control" name="confirmPassword" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-success" id="savePassword">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Xử lý đặt lại mật khẩu
+            $('.reset-password-btn').click(function() {
+                var userId = $(this).data('id');
+                $('#userId').val(userId);
+                $('#resetPasswordModal').modal('show');
+            });
+
+            $('#savePassword').click(function() {
+                var formData = $('#resetPasswordForm').serialize();
+                $.post('@Url.Action("DatLaiMatKhau", "Admin")', formData, function() {
+                    $('#resetPasswordModal').modal('hide');
+                    alert('Đặt lại mật khẩu thành công!');
+                });
+            });
+        });
+    </script>
+}
