@@ -199,6 +199,11 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Layout\_AdminLayout.cshtml" />
     <Content Include="Views\Layout\_UserLayout.cshtml" />
+    <Content Include="Views\admin\QuanLyBaiTap.cshtml" />
+    <Content Include="Views\admin\QuanLyBaiViet.cshtml" />
+    <Content Include="Views\admin\QuanLyLoTrinh.cshtml" />
+    <Content Include="Views\admin\QuanLyNguoiDung.cshtml" />
+    <Content Include="Views\admin\XemChiSoBMI.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
