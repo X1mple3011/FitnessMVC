@@ -1,0 +1,52 @@
+﻿@model IEnumerable<WebApplication1.Models.LoTrinh>
+
+@{
+    ViewBag.Title = "Lộ trình của tôi";
+    Layout = "~/Views/Layout/_UserLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Lộ trình của tôi</h2>
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="table-success">
+                <tr>
+                    <th>Tên lộ trình</th>
+                    <th>Mô tả</th>
+                    <th>Chi tiết</th>
+                    <th>Xóa</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TenLoTrinh</td>
+                    <td>@item.MoTa</td>
+                    <td>
+                        <a href="@Url.Action("ChiTiet", "LoTrinh", new { id = item.Id })" class="btn btn-info btn-sm">
+                            Xem chi tiết
+                        </a>
+                    </td>
+                    <td>
+                        <form action="@Url.Action("XoaLoTrinh", "LoTrinh")" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="loTrinhId" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn chắc chắn muốn xóa lộ trình này?');">
+                                Xóa
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            Bạn chưa chọn lộ trình nào!
+        </div>
+    }
+</div>
