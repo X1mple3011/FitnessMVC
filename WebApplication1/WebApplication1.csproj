@@ -200,6 +200,11 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\user\lotrinh\ChiTiet.cshtml" />
+    <Content Include="Views\user\lotrinh\Index.cshtml" />
+    <Content Include="Views\user\lotrinh\KetQuaBMI.cshtml" />
+    <Content Include="Views\user\lotrinh\LoTrinhCuaToi.cshtml" />
+    <Content Include="Views\user\lotrinh\NhapChiSoBMI.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
